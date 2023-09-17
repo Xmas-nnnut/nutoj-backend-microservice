@@ -1,8 +1,9 @@
 package com.xqj.nutojbackendcommon.exception;
 
-import com.xqj.nutoj.common.BaseResponse;
-import com.xqj.nutoj.common.ErrorCode;
-import com.xqj.nutoj.common.ResultUtils;
+
+import com.xqj.nutojbackendcommon.common.BaseResponse;
+import com.xqj.nutojbackendcommon.common.ErrorCode;
+import com.xqj.nutojbackendcommon.common.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
