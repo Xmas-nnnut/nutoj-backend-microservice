@@ -50,6 +50,7 @@ server:
     session:
       cookie:
         max-age: 2592000
+        path: /api
 #        domain: www.xmas-nnnut.link
 mybatis-plus:
   configuration:
@@ -63,3 +64,5 @@ mybatis-plus:
 # 代码沙箱配置
 codesandbox:
   type: remote
+knife4j:
+  enable: true
