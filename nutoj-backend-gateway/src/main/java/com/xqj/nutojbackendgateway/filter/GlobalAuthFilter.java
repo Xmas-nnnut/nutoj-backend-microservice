@@ -30,9 +30,9 @@ public class GlobalAuthFilter implements GlobalFilter, Ordered {
             response.setStatusCode(HttpStatus.FORBIDDEN);
             DataBufferFactory dataBufferFactory = response.bufferFactory();
             DataBuffer dataBuffer = dataBufferFactory.wrap("无权限".getBytes(StandardCharsets.UTF_8));
+            // Mono 反应式编程
             return response.writeWith(Mono.just(dataBuffer));
         }
-        // todo 统一权限校验，通过 JWT 获取登录用户信息
         return chain.filter(exchange);
     }
 
