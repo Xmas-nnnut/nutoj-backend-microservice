@@ -1,5 +1,6 @@
 package com.xqj.nutojbackendjudgeservice;
 
+import com.xqj.nutojbackendjudgeservice.rabbitmq.InitRabbitMq;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,6 +19,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class NutojBackendJudgeServiceApplication {
 
     public static void main(String[] args) {
+        // 初始化消息队列
+        InitRabbitMq.doInit();
         SpringApplication.run(NutojBackendJudgeServiceApplication.class, args);
     }
 
