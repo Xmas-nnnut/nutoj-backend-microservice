@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xqj.nutojbackendcommon.common.ErrorCode;
 import com.xqj.nutojbackendcommon.constant.CommonConstant;
 import com.xqj.nutojbackendcommon.exception.BusinessException;
+import com.xqj.nutojbackendcommon.utils.JwtUtils;
 import com.xqj.nutojbackendcommon.utils.SqlUtils;
 import com.xqj.nutojbackendmodel.model.dto.user.UserQueryRequest;
 import com.xqj.nutojbackendmodel.model.entity.User;
@@ -22,7 +23,11 @@ import org.springframework.util.DigestUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.xqj.nutojbackendcommon.constant.UserConstant.USER_LOGIN_STATE;
@@ -57,6 +62,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (!userPassword.equals(checkPassword)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "两次输入的密码不一致");
         }
+        // 账户不包含特殊字符
+        String validPattern = "[`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
+        // 使用正则表达式进行校验
+        Matcher matcher = Pattern.compile(validPattern).matcher(userAccount);
+        if (matcher.find()) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号含有特殊字符");
+        }
+
         synchronized (userAccount.intern()) {
             // 账户不能重复
             QueryWrapper<User> queryWrapper = new QueryWrapper<>();
@@ -104,9 +117,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             log.info("user login failed, userAccount cannot match userPassword");
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在或密码错误");
         }
-        // 3. 记录用户的登录态
+
+        //将登录信息保持在token中
+        //3、通过JWT生成token(存入id和账号)
+        Map tokenMap = new HashMap();
+        tokenMap.put("id",user.getId());
+        tokenMap.put("userAccount",user.getUserAccount());
+        String token = JwtUtils.getToken(tokenMap);
+        // 4. 记录用户的登录态
         request.getSession().setAttribute(USER_LOGIN_STATE, user);
-        return this.getLoginUserVO(user);
+        LoginUserVO loginUserVO = this.getLoginUserVO(user);
+        //5、构造返回值
+        loginUserVO.setToken(token);
+        return loginUserVO;
+
+//        // 3. 记录用户的登录态
+//        request.getSession().setAttribute(USER_LOGIN_STATE, user);
+//        return this.getLoginUserVO(user);
     }
 
     /**

@@ -10,7 +10,6 @@ import java.util.Map;
 /**
  * JWT 工具类
  *
- * @author Shier
  */
 public class JwtUtils {
 
@@ -22,7 +21,7 @@ public class JwtUtils {
     /**
      * 加密KEY
      */
-    private static final String TOKEN_SECRET = "shier";
+    private static final String TOKEN_SECRET = "xmasnnnut";
 
 
     /**
@@ -64,7 +63,7 @@ public class JwtUtils {
 
         try {
             Claims claims = Jwts.parser()
-                    .setSigningKey("shier")
+                    .setSigningKey("xmasnnnut")
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {

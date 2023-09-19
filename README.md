@@ -1,6 +1,6 @@
 <center>
 
-# Cat Online Judge
+# Nut Online Judge
 
 <div >
     <img src="https://img.shields.io/badge/Gson-3.9.1-blue.svg" alt="Gson">
