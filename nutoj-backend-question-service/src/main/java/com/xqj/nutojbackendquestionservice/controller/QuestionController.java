@@ -18,6 +18,7 @@ import com.xqj.nutojbackendmodel.model.entity.QuestionSubmit;
 import com.xqj.nutojbackendmodel.model.entity.User;
 import com.xqj.nutojbackendmodel.model.vo.QuestionSubmitVO;
 import com.xqj.nutojbackendmodel.model.vo.QuestionVO;
+import com.xqj.nutojbackendquestionservice.manage.RedissonLimiter;
 import com.xqj.nutojbackendquestionservice.service.QuestionService;
 import com.xqj.nutojbackendquestionservice.service.QuestionSubmitService;
 import com.xqj.nutojbackendserviceclient.service.UserFeignClient;
@@ -46,6 +47,9 @@ public class QuestionController {
 
     @Resource
     private QuestionSubmitService questionSubmitService;
+
+    @Resource
+    private RedissonLimiter redissonLimiter;
 
     private final static Gson GSON = new Gson();
 
@@ -309,6 +313,11 @@ public class QuestionController {
         }
         // 登录才能提交
         final User loginUser = userFeignClient.getLoginUser(request);
+        // 限流
+        boolean rateLimit = redissonLimiter.doRateLimit(loginUser.getId().toString());
+        if (!rateLimit) {
+            return ResultUtils.error(ErrorCode.TOO_MANY_REQUEST, "提交过于频繁,请稍后重试");
+        }
         long questionSubmitId = questionSubmitService.doQuestionSubmit(questionSubmitAddRequest, loginUser);
         return ResultUtils.success(questionSubmitId);
     }
