@@ -22,17 +22,25 @@ public class InitRabbitMqBean {
     @PostConstruct
     public void init() {
         try {
+            // 创建连接工厂
             ConnectionFactory factory = new ConnectionFactory();
             factory.setHost(host);
+            // 建立连接、创建频道
             Connection connection = factory.newConnection();
             Channel channel = connection.createChannel();
-            String EXCHANGE_NAME = "code_exchange";
-            channel.exchangeDeclare(EXCHANGE_NAME, "direct");
-
-            // 创建队列，随机分配一个队列名称
+            // 创建交换机
+            String exchangeName = "code_exchange";
+            channel.exchangeDeclare(exchangeName, "direct");
+            // 创建队列
             String queueName = "code_queue";
+            // 参数
+            // durable: 是否开启持久化。消息队列重启后，消息是否丢失
+            // exclusive: 是否允许当前这个创建消息队列的连接操作消息队列
+            // autoDelete: 没有人用队列后，是否要删除队列
             channel.queueDeclare(queueName, true, false, false, null);
-            channel.queueBind(queueName, EXCHANGE_NAME, "my_routingKey");
+            // 交换机与消息队列进行绑定
+            // routingKey: 控制消息要转发到哪个队列
+            channel.queueBind(queueName, exchangeName, "my_routingKey");
             log.info("消息队列启动成功");
         } catch (Exception e) {
             log.error("消息队列启动失败", e);
