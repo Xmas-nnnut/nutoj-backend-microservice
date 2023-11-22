@@ -17,6 +17,10 @@ spring:
           uri: lb://nutoj-backend-judge-service
           predicates:
             - Path=/api/judge/**
+        - id: nutoj-backend-team-service
+          uri: lb://nutoj-backend-team-service
+          predicates:
+            - Path=/api/team/**
   application:
     name: nutoj-backend-gateway
   main:
@@ -35,4 +39,4 @@ knife4j:
       # ④ 第四行配置，聚合子服务全部为Swagger2规范的文档
       version: swagger2
 gateway:
-  excludedUrls: /api/user/get/login,/api/user/logout,/user/register,/api/user/update/my,/api/user/login,/user/getLoginUser,/api/user/register,/api/question/list/page/vo,/api/file
+  excludedUrls: /api/user/get/login,/api/user/logout,/user/register,/api/user/update/my,/api/user/login,/user/getLoginUser,/api/user/register,/api/question/list/page/vo

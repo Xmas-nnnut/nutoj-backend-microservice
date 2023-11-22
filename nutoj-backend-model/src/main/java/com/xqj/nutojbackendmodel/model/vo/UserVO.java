@@ -34,6 +34,11 @@ public class UserVO implements Serializable {
     private String userProfile;
 
     /**
+     * 标签列表 json
+     */
+    private String tags;
+
+    /**
      * 用户角色：user/admin/ban
      */
     private String userRole;

@@ -43,6 +43,11 @@ public class LoginUserVO implements Serializable {
     private String userRole;
 
     /**
+     * 标签列表 json
+     */
+    private String tags;
+
+    /**
      * 创建时间
      */
     private Date createTime;

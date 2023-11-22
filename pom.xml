@@ -16,6 +16,7 @@
         <module>nutoj-backend-question-service</module>
         <module>nutoj-backend-service-client</module>
         <module>nutoj-backend-user-service</module>
+        <module>nutoj-backend-team-service</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>

@@ -57,9 +57,9 @@ public class AuthFilter implements GlobalFilter, Ordered {
         }
         ServerHttpResponse response = exchange.getResponse();
         // 3.如果校验失败，相应状态码 401
-        // 2、使用工具类，判断token是否有效
+        // 使用工具类，判断token是否有效
         boolean verifyToken = JwtUtils.verifyToken(token);
-        // 3、如果token失效，返回状态码401，拦截
+        // 如果token失效，返回状态码401，拦截
         if (!verifyToken) {
             Map<String, Object> responseData = new HashMap<>();
             responseData.put("errCode", 401);
